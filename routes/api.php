@@ -25,9 +25,9 @@ Route::prefix('orders')->group(function () {
     Route::prefix('{order}/order-lines')->group(function () {
         Route::get('', OrderLine\GetOrderLinesByOrderController::class);
         Route::post('', OrderLine\CreateOrderLineController::class);
-        Route::patch('{order-line}', OrderLine\UpdateOrderLineController::class);
-        Route::delete('{order-line}', OrderLine\DeleteOrderLineController::class);
-        Route::get('{order-line}', OrderLine\GetOrderLineController::class);
+        Route::patch('{order_line}', OrderLine\UpdateOrderLineController::class);
+        Route::delete('{order_line}', OrderLine\DeleteOrderLineController::class);
+        Route::get('{order_line}', OrderLine\GetOrderLineController::class);
     });
 });
 
