@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Collections\VoucherCollection;
 use App\Traits\ValidateTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -58,5 +59,10 @@ class Voucher extends Model
             'amount_original'   => 'int',
             'amount_remaining'  => 'int',
         ];
+    }
+
+    public function newCollection(array $models = []): VoucherCollection
+    {
+        return new VoucherCollection($models);
     }
 }

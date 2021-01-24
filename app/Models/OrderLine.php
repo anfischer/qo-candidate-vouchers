@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Collections\OrderLineCollection;
 use App\Traits\ValidateTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -60,6 +61,11 @@ class OrderLine extends Model
         'amount_total',
         'quantity'
     ];
+
+    public function newCollection(array $models = []): OrderLineCollection
+    {
+        return new OrderLineCollection($models);
+    }
 
     public function product(): BelongsTo
     {

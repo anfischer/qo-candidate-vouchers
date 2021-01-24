@@ -67,23 +67,10 @@ class Order extends Model implements CanTransform
 
     public function calculateTotal(): void
     {
-        $total = 0;
-
-        if ($this->lines && $this->lines->isNotEmpty()) {
-            $total += $this->lines->sum(fn (OrderLine $ol) => $ol->amount_total);
-        }
-
-        if ($this->voucher) {
-            $total += $this->voucher->amount_original;
-        } else {
-            $total += $this->vouchers->reduce(static function (int $carry, Voucher $voucher) {
-                $carry += $voucher->amount_original;
-
-                return $carry;
-            }, 0);
-        }
-
-        $this->total = $total;
+        $this->total = array_sum([
+            $this->lines->total(),
+            $this->voucher->amount_original ?? $this->vouchers->totalOriginalAmount(),
+        ]);
     }
 
     public function lines(): HasMany
