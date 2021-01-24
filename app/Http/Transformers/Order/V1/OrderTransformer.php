@@ -12,7 +12,7 @@ final class OrderTransformer extends TransformerAbstract
     {
         return [
             'id' => (int) $order->id,
-            'voucher_id' => $order->voucher_id ? (int) $order->voucher_id : $order->voucher_id,
+            'voucher_id' => $order->voucher_id ? (int) $order->voucher_id : null,
             'total' => (int) $order->total,
         ];
     }
