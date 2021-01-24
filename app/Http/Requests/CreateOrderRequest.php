@@ -21,6 +21,13 @@ class CreateOrderRequest extends FormRequest
         return $this->rulesForApiVersionOne();
     }
 
+    public function vouchers(): Collection
+    {
+        return Collection::wrap(
+            $this->get('voucher_id', null) ?? $this->get('voucher_ids')
+        );
+    }
+
     private function rulesForApiVersionOne(): array
     {
         return [

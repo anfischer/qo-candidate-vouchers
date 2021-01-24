@@ -75,6 +75,12 @@ class Order extends Model implements CanTransform
 
         if ($this->voucher) {
             $total += $this->voucher->amount_original;
+        } else {
+            $total += $this->vouchers->reduce(static function (int $carry, Voucher $voucher) {
+                $carry += $voucher->amount_original;
+
+                return $carry;
+            }, 0);
         }
 
         $this->total = $total;
@@ -88,5 +94,10 @@ class Order extends Model implements CanTransform
     public function voucher(): BelongsTo
     {
         return $this->belongsTo(Voucher::class);
+    }
+
+    public function vouchers(): BelongsToMany
+    {
+        return $this->belongsToMany(Voucher::class);
     }
 }
