@@ -44,14 +44,16 @@ class Voucher extends Model
         'amount_remaining'
     ];
 
-    public static function createRules() {
+    public static function createRules(): array
+    {
         return [
             'amount_original'   => 'int',
             'amount_remaining'  => 'int',
         ];
     }
 
-    public static function updateRules() {
+    public static function updateRules(): array
+    {
         return [
             'amount_original'   => 'int',
             'amount_remaining'  => 'int',
