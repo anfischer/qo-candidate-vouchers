@@ -46,38 +46,42 @@ class Order extends Model
         'total'
     ];
 
-    public function calculateTotal() {
+    public function calculateTotal()
+    {
         $total = 0;
 
-        if($this->lines && $this->lines->isNotEmpty()) {
+        if ($this->lines && $this->lines->isNotEmpty()) {
             $total += $this->lines->sum(fn (OrderLine $ol) => $ol->amount_total);
         }
 
-        if($this->voucher) {
+        if ($this->voucher) {
             $total += $this->voucher->amount_original;
         }
 
         $this->total = $total;
     }
 
-    public function lines() {
+    public function lines()
+    {
         return $this->hasMany(OrderLine::class);
     }
 
-    public function voucher() {
+    public function voucher()
+    {
         return $this->belongsTo(Voucher::class);
     }
 
-    public static function createRules() {
+    public static function createRules()
+    {
         return [
             'voucher_id'           => 'int|nullable',
         ];
     }
 
-    public static function updateRules() {
+    public static function updateRules()
+    {
         return [
             'voucher_id'           => 'int|nullable',
         ];
     }
-
 }
