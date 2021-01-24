@@ -5,9 +5,9 @@ namespace App\Models;
 use App\CanTransform;
 use App\Collections\OrderCollection;
 use App\Enums\ApiVersion;
-use App\Traits\ValidateTrait;
 use App\ValueObjects\ApiContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use League\Fractal\TransformerAbstract;
 
 /**
@@ -36,8 +36,6 @@ use League\Fractal\TransformerAbstract;
  */
 class Order extends Model implements CanTransform
 {
-    use ValidateTrait;
-
     protected $visible = [
         'id',
         'voucher_id',
@@ -88,19 +86,5 @@ class Order extends Model implements CanTransform
     public function voucher()
     {
         return $this->belongsTo(Voucher::class);
-    }
-
-    public static function createRules()
-    {
-        return [
-            'voucher_id'           => 'int|nullable',
-        ];
-    }
-
-    public static function updateRules()
-    {
-        return [
-            'voucher_id'           => 'int|nullable',
-        ];
     }
 }

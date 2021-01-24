@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Order;
 
 use App\Commands\ProvideApiResponseForContractCommand;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Services\ApiResponseProviderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use Illuminate\Http\Request;
 use Joselfonseca\LaravelTactician\CommandBusInterface;
 
 class UpdateOrderController extends Controller
@@ -24,7 +24,7 @@ class UpdateOrderController extends Controller
         );
     }
 
-    public function __invoke(Order $order, Request $request): JsonResponse
+    public function __invoke(Order $order, UpdateOrderRequest $request): JsonResponse
     {
         $order->fill($request->all());
         $order->calculateTotal();
