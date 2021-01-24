@@ -39,6 +39,11 @@ final class ApiContract
         return new self($matches[1], 'json');
     }
 
+    public static function fromConfigValues(string $apiVersion, string $contentType): self
+    {
+        return new self($apiVersion, $contentType);
+    }
+
     public function toVersionConstraint(): ApiVersion
     {
         return $this->apiVersion;

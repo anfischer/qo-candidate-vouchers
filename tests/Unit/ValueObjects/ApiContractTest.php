@@ -48,4 +48,12 @@ class ApiContractTest extends TestCase
         $apiContract = ApiContract::fromRequestAcceptHeader('application/vnd.quickorder.v1+json');
         $this->assertTrue(ContentType::JSON()->equals($apiContract->toContentType()));
     }
+
+    /** @test */
+    public function it_can_be_provided_from_config_values(): void
+    {
+        $apiContract = ApiContract::fromConfigValues('v2', 'json');
+        $this->assertTrue(ApiVersion::V2()->equals($apiContract->toVersionConstraint()));
+        $this->assertTrue(ContentType::JSON()->equals($apiContract->toContentType()));
+    }
 }
