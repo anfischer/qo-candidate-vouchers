@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
+use App\CanTransform;
+use App\Collections\OrderCollection;
+use App\Enums\ApiVersion;
 use App\Traits\ValidateTrait;
+use App\ValueObjects\ApiContract;
 use Illuminate\Database\Eloquent\Model;
+use League\Fractal\TransformerAbstract;
 
 /**
  * App\Order
@@ -29,7 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereVoucherId($value)
  */
-class Order extends Model
+class Order extends Model implements CanTransform
 {
     use ValidateTrait;
 
@@ -45,6 +50,20 @@ class Order extends Model
         'voucher_id',
         'total'
     ];
+
+    public function newCollection(array $models = []): OrderCollection
+    {
+        return new OrderCollection($models);
+    }
+
+    public function transformerForApiContract(ApiContract $apiContract): TransformerAbstract
+    {
+        if ($apiContract->toVersionConstraint()->equals(ApiVersion::V2())) {
+            return new \App\Http\Transformers\Order\V2\OrderTransformer();
+        }
+
+        return new \App\Http\Transformers\Order\V1\OrderTransformer();
+    }
 
     public function calculateTotal()
     {
