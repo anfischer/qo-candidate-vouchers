@@ -7,7 +7,9 @@ use App\Collections\OrderCollection;
 use App\Enums\ApiVersion;
 use App\ValueObjects\ApiContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use League\Fractal\TransformerAbstract;
 
 /**
@@ -63,7 +65,7 @@ class Order extends Model implements CanTransform
         return new \App\Http\Transformers\Order\V1\OrderTransformer();
     }
 
-    public function calculateTotal()
+    public function calculateTotal(): void
     {
         $total = 0;
 
@@ -78,12 +80,12 @@ class Order extends Model implements CanTransform
         $this->total = $total;
     }
 
-    public function lines()
+    public function lines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
 
-    public function voucher()
+    public function voucher(): BelongsTo
     {
         return $this->belongsTo(Voucher::class);
     }
