@@ -32,6 +32,26 @@ class OrderTest extends TestCase
     }
 
     /** @test */
+    public function an_error_response_will_be_returned_if_trying_to_get_all_orders_with_multiple_vouchers_attached_via_v1_api(): void
+    {
+        factory(Order::class, 5)->create()->each(static function (Order $order, int $index) {
+            if ($index > 0) {
+                factory(Voucher::class, 2)->create()->each(static function (Voucher $voucher) use ($order) {
+                    $order->vouchers()->attach($voucher);
+                });
+                $order->save();
+            }
+        });
+
+        $response = $this->getJson("/api/orders");
+        $response->assertStatus(400);
+        $response->assertJsonFragment([
+            'type' => 'ApiVersionException',
+            'message' => 'Order contains more than one attached voucher. To get orders with multiple vouchers attached, use api v2 or later.',
+        ]);
+    }
+
+    /** @test */
     public function it_can_get_a_single_order(): void
     {
         /** @var Order $order */
@@ -43,6 +63,24 @@ class OrderTest extends TestCase
         $response->assertOk();
 
         $this->assertEquals($order->toArray(), $response->json());
+    }
+
+    /** @test */
+    public function an_error_response_will_be_returned_if_trying_to_get_an_order_with_multiple_vouchers_attached_via_v1_api(): void
+    {
+        /** @var Order $order */
+        $order = factory(Order::class)->create();
+        factory(Voucher::class, 2)->create()->each(static function (Voucher $voucher) use ($order) {
+            $order->vouchers()->attach($voucher);
+        });
+        $order->save();
+
+        $response = $this->getJson("/api/orders/{$order->id}");
+        $response->assertStatus(400);
+        $response->assertJsonFragment([
+            'type' => 'ApiVersionException',
+            'message' => 'Order contains more than one attached voucher. To get orders with multiple vouchers attached, use api v2 or later.',
+        ]);
     }
 
     /** @test */
