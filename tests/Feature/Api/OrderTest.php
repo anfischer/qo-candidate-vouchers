@@ -71,7 +71,11 @@ class OrderTest extends TestCase
 
         $orders = Order::all();
         $this->assertCount(1, $orders);
-        $this->assertEquals($orders->first()->toArray(), $response->json());
+        $this->assertEquals([
+            'id' => $orders->first()->id,
+            'total' => $orders->first()->total,
+            'voucher_id' => $orders->first()->vouchers->first()->id,
+        ], $response->json());
         $this->assertSame(100, $orders->first()->total);
     }
 
@@ -92,7 +96,11 @@ class OrderTest extends TestCase
 
         $orders = Order::all();
         $this->assertCount(1, $orders);
-        $this->assertEquals($orders->first()->toArray(), $response->json());
+        $this->assertEquals([
+            'id' => $orders->first()->id,
+            'total' => $orders->first()->total,
+            'voucher_id' => $orders->first()->vouchers->first()->id,
+        ], $response->json());
         $this->assertSame(100, $order->fresh()->total);
     }
 
